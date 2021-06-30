@@ -1,0 +1,14 @@
+------WebKitFormBoundaryEQZHTQRGBr9Bd7nB
+Content-Disposition: form-data; name="user"
+
+zhangli
+------WebKitFormBoundaryEQZHTQRGBr9Bd7nB
+Content-Disposition: form-data; name="pass"
+
+654321
+------WebKitFormBoundaryEQZHTQRGBr9Bd7nB
+Content-Disposition: form-data; name="photo"; filename="1.txt"
+Content-Type: text/plain
+
+bbbbbb
+------WebKitFormBoundaryEQZHTQRGBr9Bd7nB--

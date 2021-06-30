@@ -20,12 +20,24 @@ let server = http.createServer((req, res) => {
     // })
     
     let aBuffer = [];
+    let postData = "";
     req.on("data", data => {
         aBuffer.push(data)
     }),
     req.on("end", () => {
         let data = Buffer.concat(aBuffer)
-        console.log(data.toString()) 
+        let head = req.headers["content-type"]
+        if(head.startsWith("multipart/form-data")){
+            //multipart/form-data
+            const boundary = "--"+head.split("; ")[1].split("=")[1];
+            let arr = data.split(boundary);
+            console.log(arr);
+        } else {
+            // x-www-form-urlencoded
+            postData = data.toString()
+        }
+        // console.log(req.headers["content-type"])
+        console.log(postData) 
 
     })
 })
