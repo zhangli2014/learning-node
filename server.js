@@ -5,6 +5,7 @@ const {v4: uuidv4} = require("uuid");
 const common = require("./utils/common");
 const path = require("path");
 
+//以下程序获取前台传过来的表单数据和文件数据，并且把文件数据给保存到unload文件夹内;
 let server = http.createServer((req, res) => {
     let {pathname, searchParams} = new URL(req.url, "http://localhost:8082")
     let newSearchParams = new URLSearchParams(searchParams)
@@ -25,13 +26,12 @@ let server = http.createServer((req, res) => {
         aBuffer.push(data)
     }),
     req.on("end", () => {
-        let data = Buffer.concat(aBuffer)
-        
+        let data = Buffer.concat(aBuffer)   
         let head = req.headers["content-type"]
         // console.log(data.toString(), head)
-        if(head.startsWith("multipart/form-data")){
-			let postData = {};  //普通的表单name数据
-			let files = {};		//文件数据
+		
+		let postData = {};  //普通的表单name数据
+        if(head.startsWith("multipart/form-data")){			
             //multipart/form-data
 			//1.提取分隔符
             const boundary = "--"+head.split("; ")[1].split("=")[1];
@@ -63,26 +63,20 @@ let server = http.createServer((req, res) => {
 				if(info.indexOf("\r\n") == -1){
 					//普通表单数据
 					let key = common.parseInfo(info).name
-					let value = data
-					postData[key] = value
+					postData[key] = data.toString()
 				}else{
 					//文件，类似于下面这样：
 					//Content-Disposition: form-data; name="photo"; filename="1.txt"
 					//Content-Type: text/plain
 
-					total++;
 					let key = common.parseInfo(info).name
 					let filename = common.parseInfo(info).filename
 					let filepath = `upload/${uuidv4().replace(/\-/g, '')}${path.extname(filename)}`
 					
-					// files[key] = {filename, filepath}
-					console.log(filepath)
+					// console.log(filepath)
 					fs.writeFile(filepath, data, err => {
 						if(err){
 							console.log(err)
-						} else {
-							complete++
-							console.log(postData, files)
 						}
 					})
 					
@@ -92,8 +86,7 @@ let server = http.createServer((req, res) => {
             // x-www-form-urlencoded
             postData = data.toString()
         }
-        // console.log(req.headers["content-type"])
-        // console.log(postData) 
+        console.log(postData) 
 
     })
 })
