@@ -21,7 +21,6 @@ let server = http.createServer((req, res) => {
     // })
     
     let aBuffer = [];
-    let postData = "";
     req.on("data", data => {
         aBuffer.push(data)
     }),
@@ -56,10 +55,6 @@ let server = http.createServer((req, res) => {
 				let data = item.slice(n+4)  //222222
 				
 				info = info.toString()
-				
-				let total = 0;
-				let complete = 0;
-				
 				if(info.indexOf("\r\n") == -1){
 					//普通表单数据
 					let key = common.parseInfo(info).name
@@ -79,7 +74,6 @@ let server = http.createServer((req, res) => {
 							console.log(err)
 						}
 					})
-					
 				}
 			})
         } else {
